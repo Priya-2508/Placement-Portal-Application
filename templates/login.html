@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <title>login</title>
+</head>
+<body>
+
+{% if msg %}
+<script>
+    alert("{{ msg }}");
+</script>
+    {% endif %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert-box {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+<div class="form-container">
+    <form method="POST">
+        <h2>Login</h2>
+
+        <p>Enter your email id</p>
+        <input type="email" name="email" placeholder="abc@gmail.com"/>
+
+        <p>Enter password</p>
+        <input type="password" name="password" />
+
+        <input type="submit" value="Login">
+    </form>
+    <a href="{{ url_for('home') }}" class="back-btn">⬅ Back to Home</a>
+</div>
+
+</body>
+</html>

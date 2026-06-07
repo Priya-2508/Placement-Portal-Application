@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #3d0055;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        background-color: #4b0082 !important;
+    }
+
+    .company-name {
+        font-weight: bold;
+        color: #00e0ff;
+    }
+
+    .top-bar {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .btn-view {
+        background-color: #00bcd4;
+        border: none;
+        color: white;
+    }
+
+    .modal-content {
+        background-color: #2c003e;
+        color: white;
+    }
+
+    .modal-header {
+        background-color: #4b0082;
+    }
+
+    .modal-body p {
+        margin-bottom: 8px;
+    }
+</style>
+
+<div class="title"> Ongoing Drives</div>
+
+<div class="table-container">
+
+    <div class="top-bar">
+        <h4>Approved Placement Drives</h4>
+    </div>
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Drive Date</th>
+                <th>Deadline to Apply</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for drive in drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td class="company-name">
+                    {{ drive.company.user.username }}
+                </td>
+
+                <td>{{ drive.job_title }}</td>
+                <td>{{ drive.drive_date }}</td>
+                <td>{{ drive.application_deadline }}</td>
+
+
+                <td>
+                    <button class="btn btn-sm btn-view"
+                            data-bs-toggle="modal"
+                            data-bs-target="#viewModal{{ drive.drive_id }}">
+                        View
+                    </button>
+                </td>
+            </tr>
+
+
+            <div class="modal fade" id="viewModal{{ drive.drive_id }}" tabindex="-1">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">Drive Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+
+                            <p><strong>Company:</strong> {{ drive.company.user.username }}</p>
+                            <p><strong>Job Title:</strong> {{ drive.job_title }}</p>
+                            <p><strong>Description:</strong> {{ drive.job_description }}</p>
+                            <p><strong>Eligibility:</strong> {{ drive.eligibility_criteria }}</p>
+                            <p><strong>Minimum CGPA:</strong> {{ drive.minimum_cgpa }}</p>
+                            <p><strong>Drive Date:</strong> {{ drive.drive_date }}</p>
+                            <p><strong>Application Deadline:</strong> {{ drive.application_deadline }}</p>
+                            <p><strong>Status:</strong> {{ drive.status }}</p>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <tr>
+                <td colspan="6">No ongoing drives available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

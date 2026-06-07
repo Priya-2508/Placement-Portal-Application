@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #3d0055;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        background: #4b0082 !important;
+    }
+
+    .status {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+    }
+
+    .pending { background: orange; }
+    .approved { background: green; }
+    .rejected { background: red; }
+</style>
+
+<div class="title">
+    Drives - {{ company.user.username }}
+</div>
+
+<div class="table-container">
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Job Title</th>
+                <th>Drive Date</th>
+                <th>Deadline</th>
+                <th>CGPA</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for drive in drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ drive.job_title }}</td>
+                <td>{{ drive.drive_date }}</td>
+                <td>{{ drive.application_deadline }}</td>
+                <td>{{ drive.minimum_cgpa }}</td>
+                <td>
+                    <span class="status {{ drive.status }}">
+                        {{ drive.status }}
+                    </span>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No drives found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

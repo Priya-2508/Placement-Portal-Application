@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .dashboard-title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 40px;
+        font-weight: bold;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+    }
+
+    .dashboard-card {
+        background: #3d0055;
+        padding: 30px 20px;
+        border-radius: 15px;
+        text-align: center;
+        transition: 0.3s;
+        text-decoration: none;
+        color: white;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .dashboard-card:hover {
+        transform: translateY(-8px) scale(1.03);
+        background: #4b0082;
+        color: white;
+    }
+
+    .dashboard-card i {
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+    }
+
+    .dashboard-card h3 {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+.dashboard-title {
+    text-align: center;
+    font-size: 2.3rem;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* smaller cards */
+    gap: 12px;   /* reduced gap */
+    margin-bottom: 20px;
+}
+
+.card-box {
+    background: #3d0055;
+    padding: 12px;  
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    transition: 0.2s;
+}
+
+.card-box:hover {
+    transform: translateY(-3px);
+}
+
+.card-box h3 {
+    margin: 0;
+    font-size: 1.4rem;  
+}
+
+.card-box p {
+    margin-top: 5px;
+    font-size: 0.8rem;   
+}
+</style>
+
+<div class="dashboard-title">Admin Dashboard</div>
+
+<div class="summary">
+
+    <div class="card-box">
+        <h3>{{ total_students }}</h3>
+        <p>Students</p>
+    </div>
+
+    <div class="card-box">
+        <h3>{{ total_companies }}</h3>
+        <p>Companies</p>
+    </div>
+
+    <div class="card-box">
+        <h3>{{ total_drives }}</h3>
+        <p>Drives</p>
+    </div>
+
+    <div class="card-box">
+        <h3>{{ total_applications }}</h3>
+        <p>Applications</p>
+    </div>
+        <div class="card-box">
+        <h3>{{ approved_companies }}</h3>
+        <p>Approved Companies </p>
+    </div>
+        <div class="card-box">
+        <h3>{{ pending_companies }}</h3>
+        <p>Pending Companies</p>
+    </div>
+
+</div>
+<div style="display:flex; justify-content:center; margin-bottom:20px;">
+    <form action="{{ url_for('admin_search') }}" method="GET" style="display:flex; gap:10px;">
+        
+        <input type="text"
+               name="query"
+               placeholder="Search by Name or ID..."
+               style="padding:6px 10px; border-radius:6px; border:none; width:220px;">
+
+        <button type="submit"
+                style="padding:6px 12px; border:none; background:white; color:#2e003e; border-radius:6px; font-weight:bold;">
+
+        </button>
+
+    </form>
+</div>
+<div class="dashboard-grid">
+
+
+    <a href="{{url_for('companyPendingApprovals')}}" class="dashboard-card">
+        <div></div>
+        <h3>Pending Company Approvals</h3>
+    </a>
+
+    <a href="{{url_for('pending_drives')}}" class="dashboard-card">
+        <div></div>
+        <h3>Pending Drive Approvals</h3>
+    </a>
+
+    <a href="{{url_for('admin_students')}}" class="dashboard-card">
+        <div></div>
+        <h3>Students</h3>
+    </a>
+
+    <a href="{{url_for('ongoingCompanies')}}" class="dashboard-card">
+        <div></div>
+        <h3>Current Companies</h3>
+    </a>
+    <a href="{{url_for('ongoing_drives')}}" class="dashboard-card">
+        <div></div>
+        <h3>Ongoing Drives</h3>
+    </a>
+    <a href="{{ url_for('admin_drives_history') }}" class="dashboard-card">
+        <div></div>
+        <h3>History</h3>
+    </a>
+
+</div>
+
+
+
+{% endblock %}

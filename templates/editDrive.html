@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background: #3d0055;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .form-title {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    label {
+        margin-top: 10px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        background: #2e003e;
+        border: none;
+        color: white;
+        margin-bottom: 15px;
+    }
+
+    .form-control:focus {
+        background: #2e003e;
+        color: white;
+        box-shadow: 0 0 5px #4b0082;
+    }
+
+    .btn-submit {
+        width: 100%;
+        background: white;
+        color: #2e003e;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 10px;
+        transition: 0.3s;
+        border: none;
+    }
+
+    .btn-submit:hover {
+        background: #4b0082;
+        color: white;
+    }
+
+    .btn-back {
+        display: block;
+        text-align: center;
+        margin-top: 10px;
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="form-container">
+
+    <div class="form-title"> Edit Drive</div>
+
+    <form method="POST">
+
+        <label>Job Title</label>
+        <input type="text" name="jobTitle" class="form-control"
+               value="{{ drive.job_title }}" required>
+
+        <label>Job Description</label>
+        <textarea name="jobDescription" class="form-control" rows="3" required>{{ drive.job_description }}</textarea>
+
+        <label>Eligibility Criteria</label>
+        <textarea name="eligibility" class="form-control" rows="2">{{ drive.eligibility_criteria }}</textarea>
+
+        <label>Minimum CGPA</label>
+        <input type="text" name="cgpa" class="form-control"
+               value="{{ drive.minimum_cgpa }}">
+
+        <label>Drive Date</label>
+        <input type="date" name="driveDate" class="form-control"
+               value="{{ drive.drive_date }}" required>
+
+        <label>Application Deadline</label>
+        <input type="date" name="deadline" class="form-control"
+               value="{{ drive.application_deadline }}" required>
+
+        <button type="submit" class="btn-submit mt-3">Update Drive</button>
+
+        <a href="{{ url_for('companyDashboard') }}" class="btn-back">← Back to Dashboard</a>
+
+    </form>
+
+</div>
+
+{% endblock %}

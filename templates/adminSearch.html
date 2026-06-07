@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+.search-box {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.search-box input {
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: none;
+    width: 220px;
+}
+
+.search-box button {
+    padding: 6px 12px;
+    border: none;
+    background: white;
+    color: #2e003e;
+    border-radius: 6px;
+    font-weight: bold;
+    margin-left: 8px;
+}
+
+
+.table-container {
+    background: #3d0055;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+}
+
+table {
+    color: white;
+}
+
+th {
+    background: #4b0082 !important;
+}
+
+.details-box {
+    background: #1a0026;
+    color: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    border: 1px solid #4b0082;
+}
+
+.details-box p {
+    margin: 6px 0;
+    font-size: 0.95rem;
+}
+
+.details-box b {
+    color: #00e0ff;
+}
+
+
+.btn-view {
+    background: #00bcd4;
+    border: none;
+    color: white;
+}
+</style>
+
+<div class="search-box">
+    <form method="GET">
+        <input type="text" name="query" placeholder="Search by Name or ID..." value="{{ query }}">
+        <button type="submit">🔍</button>
+    </form>
+</div>
+
+
+<div class="table-container">
+    <h4> Students</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for s in students %}
+
+            <!-- MAIN ROW -->
+            <tr>
+                <td>{{ s.student_id }}</td>
+                <td>{{ s.user.username }}</td>
+                <td>{{ s.user.email }}</td>
+                <td>{{ s.department }}</td>
+
+                <td>
+                    <button class="btn btn-sm btn-view"
+                            onclick="toggleBox('student{{ s.student_id }}')">
+                        View
+                    </button>
+                </td>
+            </tr>
+
+            <!-- DETAILS ROW -->
+            <tr id="student{{ s.student_id }}" style="display:none;">
+                <td colspan="5">
+                    <div class="details-box">
+
+                        <p><b>CGPA:</b> {{ s.cgpa }}</p>
+                        <p><b>Department:</b> {{ s.department }}</p>
+
+                        {% if s.resume %}
+                            <a href="{{ url_for('static', filename='resumes/' + s.resume) }}"
+                               target="_blank"
+                               class="btn btn-sm btn-success mt-2">
+                                 View Resume
+                            </a>
+                        {% else %}
+                            <p>No Resume</p>
+                        {% endif %}
+
+                    </div>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="5">No students found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+<div class="table-container">
+    <h4>Companies</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for c in companies %}
+
+
+            <tr>
+                <td>{{ c.company_id }}</td>
+                <td>{{ c.user.username }}</td>
+                <td>{{ c.user.email }}</td>
+                <td>{{ c.website }}</td>
+
+                <td>
+                    <button class="btn btn-sm btn-view"
+                            onclick="toggleBox('company{{ c.company_id }}')">
+                        View
+                    </button>
+                </td>
+            </tr>
+
+            <tr id="company{{ c.company_id }}" style="display:none;">
+                <td colspan="5">
+                    <div class="details-box">
+
+                        <p><b>Website:</b> {{ c.website }}</p>
+                        <p><b>HR Contact:</b> {{ c.hr_contact }}</p>
+                        <p><b>Status:</b> {{ c.registration_status }}</p>
+
+                    </div>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="5">No companies found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+function toggleBox(id) {
+
+    let all = document.querySelectorAll("[id^='student'], [id^='company']");
+
+    all.forEach(el => {
+        if (el.id !== id) el.style.display = "none";
+    });
+
+    let box = document.getElementById(id);
+
+    if (box.style.display === "none") {
+        box.style.display = "table-row";
+    } else {
+        box.style.display = "none";
+    }
+}
+</script>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+.title {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.table-container {
+    background: #3d0055;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+table { color: white; }
+th { background: #4b0082 !important; }
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.selected { background: green; }
+.rejected { background: red; }
+.shortlisted { background: #00bcd4; }
+.applied { background: orange; }
+</style>
+
+<div class="title">
+    Applications for {{ drive.job_title }}
+</div>
+
+<div class="table-container">
+
+    <table class="table table-bordered text-center align-middle">
+
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Student</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Resume</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for app in applications %}
+            <tr>
+
+                <td>{{ loop.index }}</td>
+
+                <td>{{ app.student.user.username }}</td>
+                <td>{{ app.student.user.email }}</td>
+                <td>{{ app.student.department }}</td>
+                <td>{{ app.student.cgpa }}</td>
+
+                <td>
+                    {% if app.student.resume %}
+                        <a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-info">
+                           View
+                        </a>
+                    {% else %}
+                        No Resume
+                    {% endif %}
+                </td>
+
+
+                <td>
+                    <span class="status {{ app.status }}">
+                        {{ app.status }}
+                    </span>
+                </td>
+
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="7">No applications for this drive</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

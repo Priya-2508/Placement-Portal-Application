@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.table-container {
+    background: #3d0055;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+table { color: white; }
+th { background: #4b0082 !important; }
+</style>
+
+<div class="title">
+    Selected Students - {{ drive.job_title }}
+</div>
+
+<div class="table-container">
+
+    <table class="table table-bordered text-center align-middle">
+
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Department</th>
+                <th>CGPA</th>
+                <th>Resume</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for app in applications %}
+            <tr>
+
+                <td>{{ loop.index }}</td>
+                <td>{{ app.student.user.username }}</td>
+                <td>{{ app.student.user.email }}</td>
+                <td>{{ app.student.department }}</td>
+                <td>{{ app.student.cgpa }}</td>
+
+                <td>
+                    {% if app.student.resume %}
+                        <a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-info">
+                           View
+                        </a>
+                    {% else %}
+                        No Resume
+                    {% endif %}
+                </td>
+
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="6">No selected students</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

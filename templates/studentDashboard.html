@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #2c003e;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    table { color: white; }
+
+    th { background: #4b0082 !important; }
+
+    .btn-apply {
+        background: green;
+        border: none;
+    }
+
+    .btn-view {
+        background: #00bcd4;
+        border: none;
+        color: white;
+    }
+
+    .company-name {
+        color: #00e0ff;
+        font-weight: bold;
+    }
+
+    .modal-content {
+        background: #3d0055;
+        color: white;
+    }
+</style>
+
+<div class="title"> Student Dashboard</div>
+
+<div class="table-container">
+
+    <h4> Upcoming Drives</h4>
+
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Drive Date</th>
+                <th>Deadline</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for drive in drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td class="company-name">
+                    {{ drive.company.user.username }}
+                </td>
+
+                <td>{{ drive.job_title }}</td>
+                <td>{{ drive.drive_date }}</td>
+                <td>{{ drive.application_deadline }}</td>
+
+           <td>
+
+            <button class="btn btn-sm btn-view"
+                data-bs-toggle="modal"
+                data-bs-target="#viewModal{{ drive.drive_id }}">
+                View
+            </button>
+
+            {% set applied_ids = student.applications | map(attribute='drive_id') | list %}
+
+            {% set deadline = drive.application_deadline %}
+
+            {% if drive.drive_id in applied_ids %}
+                <button class="btn btn-secondary btn-sm" disabled>Applied</button>
+
+            {% elif drive.application_deadline < today %}
+               <button class="btn btn-danger btn-sm" disabled>Deadline Over</button>
+
+            {% else %}
+                <a href="{{ url_for('apply_drive', drive_id=drive.drive_id) }}"
+                class="btn btn-success btn-sm">Apply</a>
+            {% endif %}
+        </td>
+            </tr>
+
+            <div class="modal fade" id="viewModal{{ drive.drive_id }}">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5>Drive Details</h5>
+                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p><b>Company:</b> {{ drive.company.user.username }}</p>
+                            <p><b>Job Title:</b> {{ drive.job_title }}</p>
+                            <p><b>Description:</b> {{ drive.job_description }}</p>
+                            <p><b>Eligibility:</b> {{ drive.eligibility_criteria }}</p>
+                            <p><b>Minimum CGPA:</b> {{ drive.minimum_cgpa }}</p>
+                            <p><b>Drive Date:</b> {{ drive.drive_date }}</p>
+                            <p><b>Deadline:</b> {{ drive.application_deadline }}</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            {% else %}
+            <tr>
+                <td colspan="6">No drives available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    
+
+</div>
+<hr class="my-5">
+
+<div class="table-container">
+
+    <h4> My Applications</h4>
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Status</th>
+                <th>Applied On</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <td>{{ app.drive.company.user.username }}</td>
+                <td>{{ app.drive.job_title }}</td>
+
+                <td>
+                    {% if app.status == 'selected' %}
+                        <span class="badge bg-success">Selected</span>
+                    {% elif app.status == 'rejected' %}
+                        <span class="badge bg-danger">Rejected</span>
+                    {% elif app.status == 'shortlisted' %}
+                        <span class="badge bg-info">Shortlisted</span>
+                    {% else %}
+                        <span class="badge bg-warning">Applied</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ app.applied_on }}</td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="5">No applications yet</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

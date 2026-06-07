@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .profile-container {
+        max-width: 700px;
+        margin: 40px auto;
+        background: #3d0055;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 6px 25px rgba(0,0,0,0.5);
+    }
+
+    .title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    label {
+        margin-top: 12px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        background: #2e003e;
+        border: none;
+        color: white;
+        margin-bottom: 15px;
+        padding: 10px;
+    }
+
+    .form-control:focus {
+        background: #2e003e;
+        color: white;
+        box-shadow: 0 0 6px #4b0082;
+    }
+
+    .btn-save {
+        width: 100%;
+        background: white;
+        color: #2e003e;
+        font-weight: bold;
+        border-radius: 8px;
+        padding: 12px;
+        border: none;
+        transition: 0.3s;
+        font-size: 1rem;
+    }
+
+    .btn-save:hover {
+        background: #4b0082;
+        color: white;
+    }
+
+    .info-box {
+        background: #2e003e;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .resume-box {
+        background: #2e003e;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .resume-link {
+        color: #00e0ff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .resume-link:hover {
+        text-decoration: underline;
+    }
+
+    .file-name {
+        font-size: 0.9rem;
+        color: #ccc;
+    }
+
+</style>
+
+<div class="profile-container">
+
+    <div class="title"> Student Profile</div>
+
+    <form method="POST" enctype="multipart/form-data">
+
+
+        <label>Name</label>
+        <div class="info-box">
+            {{ student.user.username }}
+        </div>
+
+
+        <label>Email</label>
+        <div class="info-box">
+            {{ student.user.email }}
+        </div>
+
+
+        <label>Department</label>
+        <input type="text"
+               name="department"
+               class="form-control"
+               value="{{ student.department }}"
+               required>
+
+
+        <label>CGPA</label>
+        <input type="number"
+               step="0.01"
+               name="cgpa"
+               class="form-control"
+               value="{{ student.cgpa }}"
+               required>
+
+
+        <label>Resume</label>
+
+        <div class="resume-box">
+            {% if student.resume %}
+                <div>
+                    <div class="file-name"> {{ student.resume }}</div>
+                </div>
+
+                <a href="{{ url_for('static', filename='resumes/' + student.resume) }}"
+                   target="_blank"
+                   class="resume-link">
+                   View Resume
+                </a>
+            {% else %}
+                <span>No resume uploaded</span>
+            {% endif %}
+        </div>
+
+
+        <label>Upload New Resume</label>
+        <input type="file" name="resume" class="form-control">
+
+        <button type="submit" class="btn-save mt-3">
+            Update Profile
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

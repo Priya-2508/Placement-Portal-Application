@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+.title {
+    text-align: center;
+    font-size: 2.3rem;
+    margin-bottom: 25px;
+    font-weight: bold;
+}
+
+.table-container {
+    background: #3d0055;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+table { color: white; }
+th { background: #4b0082 !important; }
+
+.company-name {
+    color: #00e0ff;
+    font-weight: bold;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.green { background: green; }
+.red { background: red; }
+.orange { background: orange; }
+
+.section-title {
+    margin-bottom: 15px;
+}
+</style>
+
+<div class="title">Drives History (Admin)</div>
+
+<div class="table-container">
+    <h4 class="section-title"> Companies</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for c in companies %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ c.user.username }}</td>
+                <td>{{ c.user.email }}</td>
+                <td>{{ c.website }}</td>
+
+                <td>
+                    <span class="status
+                        {% if c.registration_status == 'approved' %}green
+                        {% elif c.registration_status == 'rejected' %}red
+                        {% else %}orange{% endif %}">
+                        {{ c.registration_status }}
+                    </span>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container">
+    <h4 class="section-title">Ongoing Drives</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Drive Date</th>
+                <th>Deadline</th>
+                <th>Applications</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in ongoing_drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td class="company-name">{{ d.company.user.username }}</td>
+                <td>{{ d.job_title }}</td>
+                <td>{{ d.drive_date }}</td>
+                <td>{{ d.application_deadline }}</td>
+                <td>
+                <a href="{{ url_for('admin_drive_applications', drive_id=d.drive_id) }}"
+                class="btn btn-sm btn-info">
+                View Applications
+                </a>
+            </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No ongoing drives</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container">
+    <h4 class="section-title"> Completed Drives</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Drive Date</th>
+                <th>Deadline</th>
+                <th>Applications</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for d in completed_drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td class="company-name">{{ d.company.user.username }}</td>
+                <td>{{ d.job_title }}</td>
+                <td>{{ d.drive_date }}</td>
+                <td>{{ d.application_deadline }}</td>
+                <td>
+                <a href="{{ url_for('admin_drive_applications', drive_id=d.drive_id) }}"
+                class="btn btn-sm btn-info">
+                View Applications
+                </a>
+                <a href="{{ url_for('selected_students', drive_id=d.drive_id) }}"
+                class="btn btn-sm btn-success">
+                Selected
+                </a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No completed drives</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="table-container">
+    <h4 class="section-title"> Student Applications</h4>
+
+    <table class="table table-bordered text-center">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Student</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for app in applications %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ app.student.user.username }}</td>
+                <td>{{ app.drive.company.user.username }}</td>
+                <td>{{ app.drive.job_title }}</td>
+
+                <td>
+                    <span class="status
+                        {% if app.status == 'selected' %}green
+                        {% elif app.status == 'rejected' %}red
+                        {% else %}orange{% endif %}">
+                        {{ app.status }}
+                    </span>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">No applications</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #3d0055;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        background-color: #4b0082 !important;
+    }
+
+    .btn-approve {
+        background-color: green;
+        border: none;
+    }
+
+    .btn-reject {
+        background-color: red;
+        border: none;
+    }
+</style>
+
+<div class="title">📅 Pending Drive Approvals</div>
+
+<div class="table-container">
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company</th>
+                <th>Job Title</th>
+                <th>Drive Date</th>
+                <th>Deadline</th>
+                <th>Min CGPA</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for drive in drives %}
+            <tr>
+                <td>{{ loop.index }}</td>
+
+                <!-- Company Name -->
+                <td>{{ drive.company.user.username }}</td>
+
+                <td>{{ drive.job_title }}</td>
+                <td>{{ drive.drive_date }}</td>
+                <td>{{ drive.application_deadline }}</td>
+                <td>{{ drive.minimum_cgpa }}</td>
+
+                <td>
+                    <a href="{{ url_for('approve_drive', id=drive.drive_id) }}"
+                       class="btn btn-sm btn-approve">
+                       Approve
+                    </a>
+
+                    <a href="{{ url_for('reject_drive', id=drive.drive_id) }}"
+                       class="btn btn-sm btn-reject">
+                       Reject
+                    </a>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="7">No pending drives</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}
+

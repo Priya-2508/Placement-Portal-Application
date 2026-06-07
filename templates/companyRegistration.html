@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Registration</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+
+    <h2>Company Registration</h2>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert-box {{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <label>Company Name</label>
+        <input type="text" name="name" placeholder="Enter company name" required>
+
+        <label>Email</label>
+        <input type="email" name="email" placeholder="company@gmail.com" required>
+
+        <label>Website</label>
+        <input type="text" name="website" placeholder="https://example.com" required>
+
+        <label>HR Contact</label>
+        <input type="text" name="hr_contact" placeholder="Phone / Email" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter password" required>
+
+        <button type="submit">Register</button>
+
+    </form>
+     <a href="{{ url_for('home') }}" class="back-btn">⬅ Back to Home</a>
+
+    <p class="bottom-text">
+        Already have an account? <a href="/login">Login</a>
+    </p>
+
+</div>
+
+</body>
+</html>

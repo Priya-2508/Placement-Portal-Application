@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+.title {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.table-container {
+    background: #3d0055;
+    padding: 25px;
+    border-radius: 12px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.pending { background: orange; }
+.selected { background: green; }
+.rejected { background: red; }
+
+.btn-view { background: #00c6ff; border: none; }
+</style>
+
+<div class="title">📄 Applications for {{ drive.job_title }}</div>
+
+<div class="table-container">
+
+<table class="table table-bordered text-center align-middle">
+    <thead>
+        <tr>
+            <th>S.No</th>
+            <th>Student Name</th>
+            <th>Department</th>
+            <th>CGPA</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ loop.index }}</td>
+
+            <td>{{ app.student.user.username }}</td>
+            <td>{{ app.student.department }}</td>
+            <td>{{ app.student.cgpa }}</td>
+
+            <td>
+                <span class="status {{ app.status }}">
+                    {{ app.status }}
+                </span>
+            </td>
+
+            <td>
+
+    
+                <button class="btn btn-sm btn-view"
+                        data-bs-toggle="modal"
+                        data-bs-target="#profileModal{{ app.application_id }}">
+                    View
+                </button>
+
+        
+                <a href="{{ url_for('update_application', id=app.application_id, status='selected') }}"
+                   class="btn btn-sm btn-success">
+                   Select
+                </a>
+
+                <a href="{{ url_for('update_application', id=app.application_id, status='rejected') }}"
+                   class="btn btn-sm btn-danger">
+                   Reject
+                </a>
+
+            </td>
+        </tr>
+
+     
+        <div class="modal fade" id="profileModal{{ app.application_id }}">
+            <div class="modal-dialog">
+                <div class="modal-content" style="background:#2e003e; color:white;">
+
+                    <div class="modal-header">
+                        <h5>{{ app.student.user.username }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <p><b>Email:</b> {{ app.student.user.email }}</p>
+                        <p><b>Department:</b> {{ app.student.department }}</p>
+                        <p><b>CGPA:</b> {{ app.student.cgpa }}</p>
+
+                        {% if app.student.resume %}
+                            <a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+                               target="_blank"
+                               class="btn btn-info">
+                                View Resume
+                            </a>
+                        {% else %}
+                            <p>No resume uploaded</p>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        {% else %}
+        <tr>
+            <td colspan="6">No applications found</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+{% endblock %}

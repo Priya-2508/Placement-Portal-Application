@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #3d0055;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        background-color: #4b0082 !important;
+    }
+
+    .badge-approved {
+        background: green;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+    }
+
+    .btn-view {
+        background: #00c3ff;
+        color: black;
+        padding: 5px 10px;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .btn-view:hover {
+        background: #009ac7;
+        color: white;
+    }
+</style>
+
+<div class="title"> Approved Companies</div>
+
+<div class="table-container">
+
+    <table class="table table-bordered table-hover text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company Name</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>HR Contact</th>
+                <th>Status</th>
+                <th>Action</th> <!-- NEW -->
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for company in companies %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ company.user.username }}</td>
+                <td>{{ company.user.email }}</td>
+                <td>{{ company.website }}</td>
+                <td>{{ company.hr_contact }}</td>
+                <td>
+                {% if company.blocklist %}
+                    <span class="badge bg-danger">Blocked</span>
+                {% else %}
+                    <span class="badge bg-success">Active</span>
+                {% endif %}
+
+                </td>
+
+                <td>
+                    <a href="{{ url_for('company_drives', id=company.company_id) }}" 
+                       class="btn-view">
+                        View Drives
+                    </a>
+                    {% if company.blocklist == 1 %}
+
+                        <a href="{{ url_for('unblock_company', id=company.company_id) }}"
+                        class="btn btn-success btn-sm">
+                        Unblock
+                        </a>
+                    {% else %}
+
+                        <a href="{{ url_for('block_company', id=company.company_id) }}"
+                        class="btn btn-warning btn-sm">
+                        Block
+                        </a>
+                    {% endif %}
+                        <a href="{{ url_for('delete_company', id=company.company_id) }}"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Are you sure?')">
+                        Delete
+                        </a>
+                </td>
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="7">No approved companies found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% endblock %}

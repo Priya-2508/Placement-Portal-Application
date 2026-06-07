@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .title {
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 25px;
+        font-weight: bold;
+    }
+
+    .table-container {
+        background: #3d0055;
+        padding: 25px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    table {
+        color: white;
+    }
+
+    th {
+        background-color: #4b0082 !important;
+    }
+
+    .company-name {
+        color: #00e0ff;
+        font-weight: bold;
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+
+    .selected { background: green; }
+    .rejected { background: red; }
+    .shortlisted { background: #00bcd4; }
+    .applied { background: orange; }
+
+    .btn-sm {
+        margin: 2px;
+    }
+</style>
+
+<div class="title">All Applications</div>
+
+<div class="table-container">
+
+    <table class="table table-bordered table-hover text-center align-middle">
+
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Student</th>
+                <th>Email</th>
+                <th>Company</th>
+                <th>Job Role</th>
+                <th>Resume</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for app in applications %}
+            <tr>
+
+                <td>{{ loop.index }}</td>
+
+                <!-- Student -->
+                <td>{{ app.student.user.username }}</td>
+                <td>{{ app.student.user.email }}</td>
+
+                <!-- Company -->
+                <td class="company-name">
+                    {{ app.drive.company.user.username }}
+                </td>
+
+                <!-- Job -->
+                <td>{{ app.drive.job_title }}</td>
+
+                <!-- Resume -->
+                <td>
+                    {% if app.student.resume %}
+                        <a href="{{ url_for('static', filename='resumes/' + app.student.resume) }}"
+                           target="_blank"
+                           class="btn btn-sm btn-info">
+                           View
+                        </a>
+                    {% else %}
+                        No Resume
+                    {% endif %}
+                </td>
+
+                <!-- Status -->
+                <td>
+                    <span class="status {{ app.status }}">
+                        {{ app.status }}
+                    </span>
+                </td>
+
+            </tr>
+
+            {% else %}
+            <tr>
+                <td colspan="8">No applications found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}

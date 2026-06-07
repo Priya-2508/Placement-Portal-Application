@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="text-center mb-4"> Pending Company Approvals</h2>
+
+<div class="table-container">
+    <table class="table table-bordered text-center align-middle">
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Company Name</th>
+                <th>Email</th>
+                <th>Website</th>
+                <th>HR Contact</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for company in companies %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ company.user.username }}</td>
+                <td>{{ company.user.email }}</td>
+                <td>{{ company.website }}</td>
+                <td>{{ company.hr_contact }}</td>
+                <td>
+                    <a href="{{ url_for('approve_company', id=company.company_id) }}" class="btn btn-success btn-sm">Approve</a>
+                    <a href="{{ url_for('reject_company', id=company.company_id) }}" class="btn btn-danger btn-sm">Reject</a>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6">No pending approvals</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
